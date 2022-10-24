@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { Ajax } from '@syncfusion/ej2-base';
+
 import "../style/addnewitems.css"
 function fileValue(value) {
 
     var path = value.value;
     console.log(path)
     var extenstion = path.split('.').pop();
+    console.log(value.files[0])
     if (extenstion === "jpg" || extenstion === "svg" || extenstion === "jpeg" || extenstion === "png" || extenstion === "gif") {
         document.getElementById('image-preview').src = window.URL.createObjectURL(value.files[0]);
         var filename = path.replace(/^.*[\\\/]/, '').split('.').slice(0, -1).join('.');
@@ -13,7 +16,86 @@ function fileValue(value) {
         alert("File not supported. Kindly Upload the Image of below given extension ")
     }
 }
+// let onSubmitForm = () => {
+//     let sentdata = {
+//         "code":
+//             "2",
+//         "name":
+//             "orange"
+//         ,
+//         "quantity":
+//             50
+//         ,
+//         "discount": 0,
+//         "bought_price":
+//             100
+//         ,
+//         "retail_price":
+//             150
+//         ,
+//         "item_type": "1"
+//     }
+//     fetch('https://example.com/profile', {
+//         method: 'POST', // or 'PUT'
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(data),
+//     })
+//         .then((response) => response.json())
+//         .then((data) => {
+//             console.log('Success:', data);
+//         })
+//         .catch((error) => {
+//             console.error('Error:', error);
+//         });
+//     // {
+//     //     "code":
+//     //     "2",
+//     //         "name":
+//     //     "orange"
+//     //         ,
+//     //         "quantity":
+//     //     50
+//     //         ,
+//     //         "discount" : 0,
+//     //             "bought_price":
+//     //     100
+//     //         ,
+//     //         "retail_price":
+//     //     150
+//     //         ,
+//     //         "item_type": "1"
+//     // }
+// }
 const AddNewItems = () => {
+    const [productname, setproductname] = useState()
+    // const [productimagelocation, setproductimagelocation] = useState()
+    const [productid, setproductid] = useState()
+    const [producttype, setproducttype] = useState()
+    const [producttypelist, setproducttypelist] = useState()
+    const [categoryimporteddate, setcategoryimporteddate] = useState()
+    const [boughtprice, setboughtprice] = useState()
+    const [retailprice, setretailprice] = useState()
+
+    useEffect(() => {
+        const ajax = new Ajax("http://127.0.0.1:8000/inventory/item-types", "GET");
+        ajax.send();
+        ajax.onSuccess = (data) => {
+            // grid.dataSource = JSON.parse(data);
+            // setData(grid)
+            console.log(data)
+        }
+        // fetch('http://127.0.0.1:8000/inventory/item-types')
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         console.log('Success:', data);
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error:', error);
+        //     });
+    }, [])
+
     return (
         <form className="row form-horizontal">
             <div className='col-6' >
@@ -45,55 +127,41 @@ const AddNewItems = () => {
                 </div>
 
                 <div className="form-group">
-                    <label className=" control-label" htmlFor="product_name_fr">PRODUCT ID</label>
+                    <label className=" control-label" htmlFor="product_code">PRODUCT CODE</label>
                     <div className="">
-                        <input id="product_name_fr" name="product_name_fr" placeholder="PRODUCT DESCRIPTION FR" className="form-control input-md" required="" type="text" />
+                        <input id="product_code" name="product_code" placeholder="PRODUCT CODE" className="form-control input-md" required="" type="text" />
 
                     </div>
                 </div>
 
                 <div className="form-group">
-                    <label className=" control-label" htmlFor="product_categorie">PRODUCT TYPE</label>
+                    <label className=" control-label" htmlFor="product_type">PRODUCT TYPE</label>
                     <div className="">
-                        <select id="product_categorie" name="product_categorie" className="form-control">
-                        </select>
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className=" control-label" htmlFor="product_categorie">CATEGORY</label>
-                    <div className="">
-                        <select id="product_categorie" name="product_categorie" className="form-control">
+                        <select id="product_type" name="product_type" className="form-control">
                         </select>
                     </div>
                 </div>
 
                 <div className="form-group">
-                    <label className=" control-label" htmlFor="available_quantity">IMPORTED DATE</label>
+                    <label className=" control-label" htmlFor="imported_date">IMPORTED DATE</label>
                     <div className="">
-                        <input id="available_quantity" name="available_quantity" placeholder="AVAILABLE QUANTITY" className="form-control input-md" required="" type="text" />
+                        <input id="imported_date" name="imported_date" placeholder="IMPORTED DATE" className="form-control input-md" required="" type="text" />
 
                     </div>
                 </div>
 
                 <div className="form-group">
-                    <label className=" control-label" htmlFor="product_weight">BOUGHT PRICE</label>
+                    <label className=" control-label" htmlFor="bought_price">BOUGHT PRICE</label>
                     <div className="">
-                        <input id="product_weight" name="product_weight" placeholder="PRODUCT WEIGHT" className="form-control input-md" required="" type="text" />
+                        <input id="bought_price" name="bought_price" placeholder="BOUGHT PRICE" className="form-control input-md" required="" type="text" />
 
                     </div>
                 </div>
 
                 <div className="form-group">
-                    <label className=" control-label" htmlFor="product_description">RETAIL PRICE</label>
+                    <label className=" control-label" htmlFor="retail_price">RETAIL PRICE</label>
                     <div className="">
-                        <textarea className="form-control" id="product_description" name="product_description"></textarea>
-                    </div>
-                </div>
-
-                <div className="form-group">
-                    <label className=" control-label" htmlFor="product_name_fr">PRODUCT DESCRIPTION FR</label>
-                    <div className="">
-                        <textarea className="form-control" id="product_name_fr" name="product_name_fr"></textarea>
+                        <input id="retail_price" name="retail_price" placeholder="RETAIL PRICE" className="form-control input-md" required="" type="text" />
                     </div>
                 </div>
 
